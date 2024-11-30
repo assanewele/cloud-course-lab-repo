@@ -6,7 +6,6 @@ on:
       - main # The workflow runs on every push to the `main` branch
 
 jobs:
- jobs:
   # Job 1: Build the Docker image
   build:
     runs-on: ubuntu-latest
