@@ -6,12 +6,12 @@ on:
       - main # The workflow runs on every push to the `main` branch
 
 jobs:
-  # Job 1: Build the Docker image
+  # Job 1: Build the Docker image and push it to DockerHub
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3 # Retrieve the source code
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -23,20 +23,18 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:v1.0.0 .
 
+      - name: List Docker images (Before job 2)
+        run: |
+          docker images # This will show all images that are available before pushing    
+
       - name: Push Docker Image to DockerHub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:v1.0.0
 
-      - name: List Docker images (Before job 2)
-        run: |
-          docker images
-
-  
-
   # Job 2: Deploy to Azure Container Apps
   deploy-to-azure:
     runs-on: ubuntu-latest
-    needs: push-to-dockerhub # This job depends on the `push-to-dockerhub` job
+    needs: build # This job depends on the `build` job
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
