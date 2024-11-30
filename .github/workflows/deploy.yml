@@ -21,11 +21,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:${{ github.sha }} .
-
-      - name: List Docker images (Before job 2)
-        run: |
-          docker images # This will show all images that are available before pushing    
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:${{ github.sha }} .    
 
       - name: Push Docker Image to DockerHub
         run: |
