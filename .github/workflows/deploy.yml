@@ -21,7 +21,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:v1.0.0 .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:${{ github.sha }} .
 
       - name: List Docker images (Before job 2)
         run: |
@@ -29,7 +29,7 @@ jobs:
 
       - name: Push Docker Image to DockerHub
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:v1.0.0
+          docker push ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:${{ github.sha }}
 
   # Job 2: Deploy to Azure Container Apps
   deploy-to-azure:
@@ -50,7 +50,7 @@ jobs:
             --name flask-app-cloud-lab \
             --resource-group cloud-course-lab \
             --environment flask-app-env \
-            --image ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:v1.0.0 \
+            --image ${{ secrets.DOCKER_USERNAME }}/flask-app-for-cloud-lab:${{ github.sha }} \
             --target-port 5000 \
             --ingress external \
             --query configuration.ingress.fqdn
